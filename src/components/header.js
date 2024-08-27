@@ -1,7 +1,14 @@
 import React from "react";
 import { MdNotificationsActive } from "react-icons/md";
+import { useSearch } from "./context/SearchContext";
 
 export const Header = () => {
+  const { setSearchQuery } = useSearch();
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
   return (
     <header className="bg-white  shadow-md py-4">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
@@ -32,6 +39,7 @@ export const Header = () => {
               id="default-search"
               className="block  w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 focus:ring-blue-500 focus:border-blue-500"
               placeholder="Search"
+              onChange={handleSearchChange}
             />
           </div>
           <div className="ml-2 flex items-center">

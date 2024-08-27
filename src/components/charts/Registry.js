@@ -3,15 +3,17 @@ import Chart from "react-apexcharts";
 import { FaPlus, FaTimes } from "react-icons/fa";
 import Sidebar from "../sidebar";
 import { useChart } from "../context/ChartContext";
+import { useSearch } from "../context/SearchContext";
 
 export const Registry = () => {
+  const { searchQuery } = useSearch();
   const [isOpen, setIsOpen] = useState(false);
   const { toggleCharts, selectedChart } = useChart();
   const [charts, setCharts] = useState([
     {
       id: 1,
+      title: "Cloud  Risk ",
       data: {
-        title: "Cloud  Risk ",
         series: [
           { name: "Measure", data: [52] },
           { name: "Target", data: [20] },
@@ -72,6 +74,10 @@ export const Registry = () => {
     },
   ]);
 
+  const filteredCharts = charts.filter((chart) =>
+    chart.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const toggleSidebar = () => {
     setIsOpen((prev) => !prev);
   };
@@ -101,13 +107,14 @@ export const Registry = () => {
     <div className="p-4">
       <div className="font-bold mb-3 text-xl">Registry Scan :</div>
       <div className="flex flex-col lg:flex-row gap-4 p-4 rounded-3xl bg-gray-400">
-        {charts
+        {filteredCharts
           .filter((chart) => selectedChart.includes(chart.id))
           .map((chart) => (
             <div
               key={chart.id}
               className="flex-1 border rounded-3xl bg-white p-4 flex flex-col items-center justify-center relative cursor-pointer"
             >
+              <p className="font-bold text-lg mb-2">{chart.title}</p>
               <div
                 className="absolute top-2 right-2 cursor-pointer"
                 onClick={() => toggleCharts(chart.id)}

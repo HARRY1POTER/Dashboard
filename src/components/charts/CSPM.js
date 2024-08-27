@@ -3,8 +3,10 @@ import ReactApexChart from "react-apexcharts";
 import { FaPlus, FaTimes } from "react-icons/fa";
 import Sidebar from "../sidebar";
 import { useChart } from "../context/ChartContext";
+import { useSearch } from "../context/SearchContext";
 
 export const CSPM = () => {
+  const { searchQuery } = useSearch();
   const [isOpen, setIsOpen] = useState(false);
   const { selectedCharts, toggleChart } = useChart();
 
@@ -38,6 +40,10 @@ export const CSPM = () => {
     }));
   };
 
+  const filteredCharts = chartData.filter((chart) =>
+    chart.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const notificationRef = useRef(null);
   const sidebarRef = useRef(null);
 
@@ -67,7 +73,7 @@ export const CSPM = () => {
     <div className="p-4">
       <p className="font-bold mb-3">CSPM Executive Dashboard:</p>
       <div className="flex flex-col lg:flex-row gap-4 p-4 rounded-3xl bg-gray-400">
-        {chartData
+        {filteredCharts
           .filter((chart) => selectedCharts.includes(chart.id))
           .map((chart) => {
             const options = {
